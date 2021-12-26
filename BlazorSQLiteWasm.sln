@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32002.261
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorSQLiteAsm", "BlazorSQLiteAsm.csproj", "{5EB87BDC-BDA8-4562-8692-9E85FD2383FC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorSQLiteWasm", "BlazorSQLiteWasm.csproj", "{5EB87BDC-BDA8-4562-8692-9E85FD2383FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

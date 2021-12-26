@@ -4,7 +4,7 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace BlazorSQLiteAsm
+namespace BlazorSQLiteWasm
 {
 	public class Program
 	{
