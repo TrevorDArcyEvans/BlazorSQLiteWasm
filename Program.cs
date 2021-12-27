@@ -1,28 +1,28 @@
+namespace BlazorSQLiteWasm;
+
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace BlazorSQLiteWasm
+public class Program
 {
-  public class Program
+  public static async Task Main(string[] args)
   {
-    public static async Task Main(string[] args)
-    {
 #if DEBUG
-      // Allow some time for debugger to attach to Blazor framework debugging proxy
-      await Task.Delay(TimeSpan.FromSeconds(2));
+    // Allow some time for debugger to attach to Blazor framework debugging proxy
+    await Task.Delay(TimeSpan.FromSeconds(2));
 #endif
 
-      var builder = WebAssemblyHostBuilder.CreateDefault(args);
-      builder.RootComponents.Add<App>("#app");
+    var builder = WebAssemblyHostBuilder.CreateDefault(args);
+    builder.RootComponents.Add<App>("#app");
 
-      builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+    builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-      SQLitePCL.Batteries.Init();
+    SQLitePCL.Batteries.Init();
+    SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());
 
-      await builder.Build().RunAsync();
-    }
+    await builder.Build().RunAsync();
   }
 }
