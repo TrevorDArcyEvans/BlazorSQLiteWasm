@@ -6,21 +6,23 @@ using System.Threading.Tasks;
 
 namespace BlazorSQLiteWasm
 {
-	public class Program
-	{
-		public static async Task Main(string[] args)
-		{
+  public class Program
+  {
+    public static async Task Main(string[] args)
+    {
 #if DEBUG
-			// Allow some time for debugger to attach to Blazor framework debugging proxy
-			await Task.Delay(TimeSpan.FromSeconds(2));
+      // Allow some time for debugger to attach to Blazor framework debugging proxy
+      await Task.Delay(TimeSpan.FromSeconds(2));
 #endif
 
-			var builder = WebAssemblyHostBuilder.CreateDefault(args);
-			builder.RootComponents.Add<App>("#app");
+      var builder = WebAssemblyHostBuilder.CreateDefault(args);
+      builder.RootComponents.Add<App>("#app");
 
-			builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+      builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-			await builder.Build().RunAsync();
-		}
-	}
+      SQLitePCL.Batteries.Init();
+
+      await builder.Build().RunAsync();
+    }
+  }
 }
