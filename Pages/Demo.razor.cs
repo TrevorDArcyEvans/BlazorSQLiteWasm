@@ -7,8 +7,8 @@ public partial class Demo
 {
   private async Task TestSQLite()
   {
-    var connStr = "Data Source=/local/MyData.db";
-    var db = new SqliteConnection(connStr);
+    var db = new SqliteConnection("Data Source=DemoData.db");
+
     await db.OpenAsync();
   }
 }
