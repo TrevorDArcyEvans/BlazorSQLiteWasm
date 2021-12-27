@@ -1,10 +1,65 @@
 ﻿@page "/demo"
+@using BlazorSQLiteWasm.Models
 
 <h1>Test SQLite</h1>
-<p />
+<p/>
 
 <div>
   <text>@_version</text>
   <p/>
   <button class="btn btn-primary" @onclick="@(async () => await SQLiteVersion())">SQLite Version</button>
+</div>
+<hr/>
+<p/>
+
+<div>
+  <label for="brand">Brand:</label>
+  <input type="text" id="brand" @bind="_newBrand"/>
+  <p/>
+  <label for="price">Price:</label>
+  <input type="number" id="price" @bind="_newPrice"/>
+  <p/>
+  <button class="btn btn-primary" @onclick="@(async () => await Add(new Car { Brand = _newBrand, Price = _newPrice }))">Add</button>
+</div>
+<hr/>
+<p/>
+
+<div>
+  <table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+      <td >Id</td>
+      <td>Brand</td>
+      <td>Price</td>
+      <td>Update</td>
+      <td>Delete</td>
+    </tr>
+    </thead>
+    @foreach (var car in _cars)
+    {
+      <tr>
+        <td>@car.Id</td>
+        <td>
+          <input type="text" @bind="car.Brand" class="form-text"/>
+        </td>
+        <td>
+          <input type="number" @bind="car.Price" class="form-text"/>
+        </td>
+        <td>
+          <button onclick="@(async () => await Update(new Car { Id = car.Id, Brand = car.Brand, Price = car.Price }))" class="btn btn-default btn-sm">
+            <span>
+              <img src="check.png" width="32" height="32"/>
+            </span>
+          </button>
+        </td>
+        <td>
+          <button onclick="@(async () => await Delete(car.Id))" class="btn btn-default btn-sm">
+            <span>
+              <img src="rubbish-bin.png" width="32" height="32"/>
+            </span>
+          </button>
+        </td>
+      </tr>
+    }
+  </table>
 </div>
