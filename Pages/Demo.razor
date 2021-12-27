@@ -3,4 +3,8 @@
 <h1>Test SQLite</h1>
 <p />
 
-<button class="btn btn-primary" @onclick="@(async () => await TestSQLite())">SQLite me</button>
+<div>
+  <text>@_version</text>
+  <p/>
+  <button class="btn btn-primary" @onclick="@(async () => await SQLiteVersion())">SQLite Version</button>
+</div>
