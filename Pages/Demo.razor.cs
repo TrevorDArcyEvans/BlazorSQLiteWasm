@@ -11,15 +11,22 @@ public partial class Demo
   private string _version = "unknown";
 
   private string _newBrand = "no brand";
-  private int _newPrice = 22;
+  private int _newPrice = 999;
 
-  private List<Car> _cars = new()
+  private List<Car> _cars;
+
+  protected override Task OnInitializedAsync()
   {
-    new Car { Id = 0, Brand = "Audi", Price = 21000 },
-    new Car { Id = 1, Brand = "Volvo", Price = 11000 },
-    new Car { Id = 2, Brand = "Range Rover", Price = 135000 },
-    new Car { Id = 3, Brand = "Ford", Price = 8995 }
-  };
+    _cars = new()
+    {
+      new Car { Id = 0, Brand = "Audi", Price = 21000 },
+      new Car { Id = 1, Brand = "Volvo", Price = 11000 },
+      new Car { Id = 2, Brand = "Range Rover", Price = 135000 },
+      new Car { Id = 3, Brand = "Ford", Price = 8995 }
+    };
+
+    return base.OnInitializedAsync();
+  }
 
   private async Task SQLiteVersion()
   {
