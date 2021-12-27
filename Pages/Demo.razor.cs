@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
+﻿namespace BlazorSQLiteWasm.Pages;
+
+using System.Collections.Generic;
 using System.Linq;
-
-namespace BlazorSQLiteWasm.Pages;
-
+using System.Threading.Tasks;
 using Models;
 using Microsoft.Data.Sqlite;
-using System.Threading.Tasks;
 
 public partial class Demo
 {
