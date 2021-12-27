@@ -3,6 +3,8 @@
 Showing how to integrate _SQLite_ into a _Blazor_ wasm app which runs completely
 inside the browser.
 
+![index](index.png)
+
 ## Prerequisites
 * .NET Core 6
 * Microsoft Visual Studio 2022
