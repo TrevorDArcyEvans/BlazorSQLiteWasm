@@ -1,7 +1,10 @@
 namespace BlazorSQLiteWasm;
 
+using Data;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Pages;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -20,8 +23,11 @@ public class Program
 
     builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-    SQLitePCL.Batteries.Init();
-    SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());
+    // Sets up EF Core with Sqlite
+    builder.Services.AddDbContextFactory<ClientSideDbContext>(options =>
+      options
+        .UseSqlite($"Filename={Demo.SqliteDbFilename}")
+        .EnableSensitiveDataLogging());
 
     await builder.Build().RunAsync();
   }

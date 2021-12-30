@@ -1,36 +1,67 @@
 ﻿namespace BlazorSQLiteWasm.Pages;
 
+using Data;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.JSInterop;
+using Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using Models;
-using Microsoft.Data.Sqlite;
 
 public partial class Demo
 {
+  public const string SqliteDbFilename = "DemoData.db";
+
   private string _version = "unknown";
 
   private string _newBrand = "no brand";
   private int _newPrice = 999;
 
-  private List<Car> _cars;
+  private List<Car> _cars = new();
 
-  protected override Task OnInitializedAsync()
+  [Inject]
+  private IJSRuntime _js { get; set; }
+
+  [Inject]
+  private IDbContextFactory<ClientSideDbContext> _dbContextFactory { get; set; }
+
+  protected override async Task OnInitializedAsync()
   {
-    _cars = new()
-    {
-      new Car { Id = 0, Brand = "Audi", Price = 21000 },
-      new Car { Id = 1, Brand = "Volvo", Price = 11000 },
-      new Car { Id = 2, Brand = "Range Rover", Price = 135000 },
-      new Car { Id = 3, Brand = "Ford", Price = 8995 }
-    };
+    var module = await _js.InvokeAsync<IJSObjectReference>("import", "./dbstorage.js");
 
-    return base.OnInitializedAsync();
+    if (RuntimeInformation.IsOSPlatform(OSPlatform.Create("browser")))
+    {
+      await module.InvokeVoidAsync("synchronizeFileWithIndexedDb", SqliteDbFilename);
+    }
+
+    await using var db = await _dbContextFactory.CreateDbContextAsync();
+    await db.Database.EnsureCreatedAsync();
+
+    if (!db.Cars.Any())
+    {
+      var cars = new[]
+      {
+        new Car { Brand = "Audi", Price = 21000 },
+        new Car { Brand = "Volvo", Price = 11000 },
+        new Car { Brand = "Range Rover", Price = 135000 },
+        new Car { Brand = "Ford", Price = 8995 }
+      };
+
+      await db.Cars.AddRangeAsync(cars);
+      await db.SaveChangesAsync();
+    }
+
+    _cars.AddRange(db.Cars);
+
+    await base.OnInitializedAsync();
   }
 
   private async Task SQLiteVersion()
   {
-    await using var db = new SqliteConnection("Data Source=DemoData.db");
+    await using var db = new SqliteConnection($"Data Source={SqliteDbFilename}");
     await db.OpenAsync();
     await using var cmd = new SqliteCommand("SELECT SQLITE_VERSION()", db);
     _version = (await cmd.ExecuteScalarAsync())?.ToString();
@@ -38,25 +69,35 @@ public partial class Demo
 
   private async Task Add(Car upCar)
   {
-    var idx = _cars.Max(c => c.Id) + 1;
-    upCar.Id = idx;
-    _cars.Add(upCar);
+    var db = await _dbContextFactory.CreateDbContextAsync();
+    await db.Cars.AddAsync(upCar);
+    await db.SaveChangesAsync();
+    _cars.Clear();
+    _cars.AddRange(db.Cars);
     StateHasChanged();
   }
 
   private async Task Update(Car upCar)
   {
-    var car = _cars.Single(c => c.Id == upCar.Id);
+    var db = await _dbContextFactory.CreateDbContextAsync();
+    var car = db.Cars.SingleOrDefault(c => c.Id == upCar.Id);
     car.Brand = upCar.Brand;
     car.Price = upCar.Price;
+    db.Cars.Update(car);
+    await db.SaveChangesAsync();
+    _cars.Clear();
+    _cars.AddRange(db.Cars);
     StateHasChanged();
   }
 
   private async Task Delete(int id)
   {
-    var car = _cars.SingleOrDefault(c => c.Id == id);
-    var idx = _cars.IndexOf(car);
-    _cars.RemoveAt(idx);
+    var db = await _dbContextFactory.CreateDbContextAsync();
+    var car = db.Cars.SingleOrDefault(c => c.Id == id);
+    db.Cars.Remove(car);
+    await db.SaveChangesAsync();
+    _cars.Clear();
+    _cars.AddRange(db.Cars);
     StateHasChanged();
   }
 }
