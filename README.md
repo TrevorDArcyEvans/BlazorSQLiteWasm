@@ -1,7 +1,7 @@
-# Blazor + SQLite + WebAssembly
+# Blazor + EF Core + SQLite + WebAssembly
 
 Showing how to integrate _SQLite_ into a _Blazor_ wasm app which runs completely
-inside the browser.
+inside the browser!
 
 ![index](index.png)
 
@@ -46,15 +46,42 @@ Ignore warnings (!)
 
 </details>
 
+## How It Works
+
+<details>
+
+This project is largely based on demo code from [BlazeOrbital](https://github.com/SteveSandersonMS/BlazeOrbital)
+and requires a number of coordinated and cooperating parts.
+
+### C# .NET
+* application code
+* Entity Framework Core
+* EF Core SQlite provider
+is all compiled into the final wasm file.
+
+### Javascript
+A small piece of [helper code](./wwwroot/dbstorage.js) is required to create an _SQLite_ database file in the browser.
+This is called from C# application code via .NET-javascript interop, _IJSRuntime_.  The database file is created on a
+per-user basis and is persistent between browser sessions.
+<p/>
+
+![sqlite-storage](sqlite-storage.png)
+
+### emscripten
+_SQLite_ C source code is compiled by _emscripten_ to a shared library, `e_sqlite.o`, which is then
+linked into the final wasm file.  This is required by _EF Core SQLite_ provider.
+
+</details>
+
 ## Further Information
 
 <details>
 
+* [BlazeOrbital](https://github.com/SteveSandersonMS/BlazeOrbital)
 * [Uno Platform based SQLitePCLRaw provider for WebAssembly](https://github.com/unoplatform/Uno.SQLitePCLRaw.Wasm)
 * [How do I call SQLitePCL.Batteries.Init().?](https://stackoverflow.com/questions/50746465/how-do-i-call-sqlitepcl-batteries-init)
 * [SQLite-net](https://github.com/praeclarum/sqlite-net)
 * [Sqlite database for WebAssembly](https://github.com/unoplatform/Uno.Samples/tree/master/UI/SQLiteSample)
-* [BlazeOrbital](https://github.com/SteveSandersonMS/BlazeOrbital)
 * [sqlite](https://github.com/cloudmeter/sqlite)
 * [emscripten](https://emscripten.org/)
 
