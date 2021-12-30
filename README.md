@@ -57,6 +57,7 @@ and requires a number of coordinated and cooperating parts.
 * application code
 * Entity Framework Core
 * EF Core SQlite provider
+
 is all compiled into the final wasm file.
 
 ### Javascript
