@@ -30,16 +30,17 @@ public partial class Demo
 
   protected override async Task OnInitializedAsync()
   {
-    var module = await _js.InvokeAsync<IJSObjectReference>("import", "./dbstorage.js");
-
     if (RuntimeInformation.IsOSPlatform(OSPlatform.Create("browser")))
     {
+      // create SQLite database file in browser
+      var module = await _js.InvokeAsync<IJSObjectReference>("import", "./dbstorage.js");
       await module.InvokeVoidAsync("synchronizeFileWithIndexedDb", SqliteDbFilename);
     }
 
     await using var db = await _dbContextFactory.CreateDbContextAsync();
     await db.Database.EnsureCreatedAsync();
 
+    // create seed data
     if (!db.Cars.Any())
     {
       var cars = new[]
@@ -51,10 +52,9 @@ public partial class Demo
       };
 
       await db.Cars.AddRangeAsync(cars);
-      await db.SaveChangesAsync();
     }
 
-    _cars.AddRange(db.Cars);
+    await Update(db);
 
     await base.OnInitializedAsync();
   }
@@ -67,34 +67,33 @@ public partial class Demo
     _version = (await cmd.ExecuteScalarAsync())?.ToString();
   }
 
-  private async Task Add(Car upCar)
+  private async Task Create(Car upCar)
   {
     var db = await _dbContextFactory.CreateDbContextAsync();
     await db.Cars.AddAsync(upCar);
-    await db.SaveChangesAsync();
-    _cars.Clear();
-    _cars.AddRange(db.Cars);
-    StateHasChanged();
+    await Update(db);
   }
 
   private async Task Update(Car upCar)
   {
     var db = await _dbContextFactory.CreateDbContextAsync();
-    var car = db.Cars.SingleOrDefault(c => c.Id == upCar.Id);
+    var car = await db.Cars.FindAsync(upCar.Id);
     car.Brand = upCar.Brand;
     car.Price = upCar.Price;
     db.Cars.Update(car);
-    await db.SaveChangesAsync();
-    _cars.Clear();
-    _cars.AddRange(db.Cars);
-    StateHasChanged();
+    await Update(db);
   }
 
   private async Task Delete(int id)
   {
     var db = await _dbContextFactory.CreateDbContextAsync();
-    var car = db.Cars.SingleOrDefault(c => c.Id == id);
+    var car = await db.Cars.FindAsync(id);
     db.Cars.Remove(car);
+    await Update(db);
+  }
+
+  private async Task Update(ClientSideDbContext db)
+  {
     await db.SaveChangesAsync();
     _cars.Clear();
     _cars.AddRange(db.Cars);

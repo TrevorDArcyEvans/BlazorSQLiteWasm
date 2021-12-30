@@ -17,7 +17,7 @@
   <label for="price">Price:</label>
   <input type="number" id="price" @bind="_newPrice"/>
   <p/>
-  <button class="btn btn-primary" @onclick="@(async () => await Add(new Car { Brand = _newBrand, Price = _newPrice }))">Add</button>
+  <button class="btn btn-primary" @onclick="@(async () => await Create(new Car { Brand = _newBrand, Price = _newPrice }))">Create</button>
 </div>
 <hr/>
 <p/>
