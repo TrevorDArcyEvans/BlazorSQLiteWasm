@@ -17,10 +17,7 @@ public partial class Demo
 
   private string _version = "unknown";
 
-  private string _newBrand = "no brand";
-  private int _newPrice = 999;
-
-  private List<Car> _cars = new();
+  private readonly List<Car> _cars = new();
 
   [Inject]
   private IJSRuntime _js { get; set; }
