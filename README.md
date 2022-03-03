@@ -68,9 +68,42 @@ per-user basis and is persistent between browser sessions.
 
 ![sqlite-storage](sqlite-storage.png)
 
+There is some additional code:
+
+```javascript
+    setInterval(() => {
+      const path = `/${filename}`;
+      if (FS.analyzePath(path).exists) {
+        const mtime = FS.stat(path).mtime;
+        if (mtime.valueOf() !== lastModifiedTime.valueOf()) {
+          lastModifiedTime = mtime;
+          const data = FS.readFile(path);
+          db.result.transaction('Files', 'readwrite').objectStore('Files').put(data, 'file');
+        }
+      }
+    }, 1000);
+```
+
+which runs every second.  This is an artefact from the original [BlazeOrbital](https://github.com/SteveSandersonMS/BlazeOrbital)
+project which required the data to be synchronised every second; and is not required for this example.
+
 ### emscripten
 _SQLite_ C source code is compiled by _emscripten_ to a shared library, `e_sqlite.o`, which is then
 linked into the final wasm file.  This is required by _EF Core SQLite_ provider.
+
+
+### Schema updates
+If more properties are added to _Car_ class, the application will throw EF Core exception.  This is because the class and
+and underlying database schema are now mismatched.  The database needs to be rebuilt and, during testing and development, 
+this can be done by running:
+
+```csharp
+await db.Database.EnsureDeletedAsync();
+await db.Database.EnsureCreatedAsync();
+```
+
+For production, you could follow the guide
+[here](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/applying?tabs=dotnet-core-cli#apply-migrations-at-runtime)
 
 </details>
 
