@@ -8,12 +8,12 @@ inside the browser!
 ## Prerequisites
 * .NET Core 6
 * `wasm-tools` workload
-<details>
-
-  ```bash
-  $ sudo dotnet workload install wasm-tools
-  ```
-</details>
+  <details>
+  
+    ```bash
+    $ sudo dotnet workload install wasm-tools
+    ```
+  </details>
 
 * Microsoft Visual Studio 2022
 * JetBrains Rider
