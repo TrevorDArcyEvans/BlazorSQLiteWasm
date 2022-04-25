@@ -7,11 +7,19 @@ inside the browser!
 
 ## Prerequisites
 * .NET Core 6
+* `wasm-tools` workload
+<details>
+
+  ```bash
+  $ sudo dotnet workload install wasm-tools
+  ```
+</details>
+
 * Microsoft Visual Studio 2022
+* JetBrains Rider
+* Visual Studio Code
 * Google Chrome
   * should work in other browsers which support wasm
-
-**Debugging of wasm does not work on _JetBrains Rider 2021.3_**
 
 ## Getting Started
 
@@ -20,12 +28,18 @@ inside the browser!
 ### Building
 
 ```bash
+$ git clone https://github.com/TrevorDArcyEvans/BlazorSQLiteWasm.git
+$ cd BlazorSQLiteWasm
 $ dotnet build
+$ dotnet run
 ```
+open [BlazorSQLiteWasm](http://localhost:5000)
 
 ### Debugging
 * open _BlazorSQLiteWasm.sln_ in _Visual Studio 2022_
 * _F5_ to run will open a browser and load wasm
+
+Debugging _should_ also work with the latest _JetBrains Rider_
 
 ### Rebuilding `e_sqlite3.o`
 
@@ -112,6 +126,8 @@ For production, you could follow the guide
 <details>
 
 * [BlazeOrbital](https://github.com/SteveSandersonMS/BlazeOrbital)
+* [`WasmBuildNative`](https://github.com/dotnet/AspNetCore.Docs/issues/24443)
+* [webassembly native dependencies](https://docs.microsoft.com/en-us/aspnet/core/blazor/webassembly-native-dependencies?view=aspnetcore-6.0)
 * [Uno Platform based SQLitePCLRaw provider for WebAssembly](https://github.com/unoplatform/Uno.SQLitePCLRaw.Wasm)
 * [How do I call SQLitePCL.Batteries.Init().?](https://stackoverflow.com/questions/50746465/how-do-i-call-sqlitepcl-batteries-init)
 * [SQLite-net](https://github.com/praeclarum/sqlite-net)
