@@ -101,6 +101,14 @@ await db.Database.EnsureCreatedAsync();
 For production, you could follow the guide
 [here](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/applying?tabs=dotnet-core-cli#apply-migrations-at-runtime)
 
+### Publishing
+There are several workarounds required to successfully publish this successfully:
+* various options for _emscripten_
+  * `AllowUnsafeBlocks`
+  * `EmccExtraLDFlags`
+* force all types to be included in wasm file
+  * [ [.NET 6] Migrate API - Could not find method 'AddYears' on type 'System.DateOnly'](https://github.com/dotnet/efcore/issues/26860)
+
 </details>
 
 ## Further Information
