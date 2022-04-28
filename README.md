@@ -5,6 +5,9 @@ inside the browser!
 
 ![index](index.png)
 
+## Demo
+[BlazorSQLiteWasm](https://trevordarcyevans.github.io/BlazorSQLiteWasm/)
+
 ## Prerequisites
 * .NET Core 6
 * `wasm-tools` workload
