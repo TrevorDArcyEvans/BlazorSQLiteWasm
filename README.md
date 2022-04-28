@@ -41,23 +41,6 @@ open [BlazorSQLiteWasm](http://localhost:5000)
 
 Debugging _should_ also work with the latest _JetBrains Rider_
 
-### Rebuilding `e_sqlite3.o`
-
-This file is currently supplied as a binary blob but can easily be
-regenerated from _SQLite_ source code and _emscripten_.
-
-<details>
-
-```bash
-$ git clone https://github.com/cloudmeter/sqlite
-$ cd sqlite
-$ emcc sqlite3.c -shared -o e_sqlite3.o
-```
-
-Ignore warnings (!)
-
-</details>
-
 </details>
 
 ## How It Works
@@ -101,10 +84,9 @@ There is some additional code:
 which runs every second.  This is an artefact from the original [BlazeOrbital](https://github.com/SteveSandersonMS/BlazeOrbital)
 project which required the data to be synchronised every second; and is not required for this example.
 
-### emscripten
-_SQLite_ C source code is compiled by _emscripten_ to a shared library, `e_sqlite.o`, which is then
-linked into the final wasm file.  This is required by _EF Core SQLite_ provider.
-
+### SQLite
+_SQLite_ driver is provided by _SQLitePCLRaw.bundle_e_sqlite3_ nuget package and is linked
+into the final wasm file.
 
 ### Schema updates
 If more properties are added to _Car_ class, the application will throw EF Core exception.  This is because the class and

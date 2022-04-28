@@ -12,7 +12,7 @@
 
     <!-- EF Core and Sqlite -->
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.1" />
-    <NativeFileReference Include="Data\e_sqlite3.o" />
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.0-pre20220207221914" />
   </ItemGroup>
 
 </Project>
