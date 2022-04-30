@@ -105,12 +105,26 @@ For production, you could follow the guide
 [here](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/applying?tabs=dotnet-core-cli#apply-migrations-at-runtime)
 
 ### Publishing
-There are several workarounds required to successfully publish this successfully:
+There are several workarounds required to successfully publish this:
 * various options for _emscripten_
   * `AllowUnsafeBlocks`
   * `EmccExtraLDFlags`
 * force all types to be included in wasm file
   * [ [.NET 6] Migrate API - Could not find method 'AddYears' on type 'System.DateOnly'](https://github.com/dotnet/efcore/issues/26860)
+
+Once published, it can be served by any webserver capable of serving static content
+eg python test server
+
+```bash
+$ dotnet publish
+$ cd cd bin/Debug/net6.0/publish/wwwroot/
+$ python3 -m http.server
+```
+
+ open [BlazorSQLiteWasm](http://localhost:8000)
+
+Note that there are specific workarounds in [index.html](wwwroot/index.html) for
+hosting on GitHub.io pages
 
 </details>
 
