@@ -63,7 +63,7 @@ is all compiled into the final wasm file.
 ### Javascript
 A small piece of [helper code](./wwwroot/dbstorage.js) is required to create an _SQLite_ database file in the browser.
 This is called from C# application code via .NET-javascript interop, _IJSRuntime_.  The database file is created on a
-per-user basis and is persistent between browser sessions.
+per-user-per-url basis and is persistent between browser sessions.
 <p/>
 
 ![sqlite-storage](sqlite-storage.png)
