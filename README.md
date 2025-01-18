@@ -8,8 +8,16 @@ inside the browser!
 ## Demo
 [BlazorSQLiteWasm](https://trevordarcyevans.github.io/BlazorSQLiteWasm/)
 
+## Changes in this Fork
+This fork addresses issues with the original project:
+* .NET 6 supports the Module object in JS Interop, but .NET 8 and above do not
+* .NET 8 and above use the Blazor.runtime object to provide access to the Mono and Emscripten APIs
+* The Sqlite Nuget had to be updated for .NET 8+ compatibility
+* The Javascript code for syncing the file actually *is** necessary, so I fixed it as well and kept it in
+* More info about the .NET breaking changes can be found here: https://learn.microsoft.com/en-us/dotnet/core/compatibility/aspnet-core/9.0/legacy-apis
+
 ## Prerequisites
-* .NET Core 6
+* .NET Core 8 or 9
 * `wasm-tools` workload
   <details>
   
@@ -21,7 +29,7 @@ inside the browser!
 * Microsoft Visual Studio 2022
 * JetBrains Rider
 * Visual Studio Code
-* Google Chrome
+* Google Chrome or Microsoft Edge
   * should work in other browsers which support wasm
 
 ## Getting Started
@@ -85,7 +93,7 @@ There is some additional code:
 ```
 
 which runs every second.  This is an artefact from the original [BlazeOrbital](https://github.com/SteveSandersonMS/BlazeOrbital)
-project which required the data to be synchronised every second; and is not required for this example.
+project which required the data to be synchronised every second. **This code is actually required otherwise all data can be lost on reload.**
 
 ### SQLite
 _SQLite_ driver is provided by _SQLitePCLRaw.bundle_e_sqlite3_ nuget package and is linked
